@@ -15,6 +15,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 */
 /*=== MEDIA QUERY ===*/
 @import url("https://fonts.googleapis.com/css?family=Lora:400,400i|Open+Sans:300,400,600,700,800");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
 body {
   font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -401,6 +402,295 @@ button:focus,
 
 .main-nav .navbar-brand {
   padding: 0;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+@keyframes brand-rainbow-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.main-nav .navbar-brand-text {
+  margin-left: 14px;
+  font-family: "Plus Jakarta Sans", "Open Sans", system-ui, sans-serif;
+  font-size: 1.28rem;
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  background-image: linear-gradient(
+    90deg,
+    #ef4444,
+    #f97316,
+    #eab308,
+    #22c55e,
+    #14b8a6,
+    #3b82f6,
+    #6366f1,
+    #a855f7,
+    #ec4899,
+    #ef4444
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: brand-rainbow-flow 5.5s linear infinite;
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .main-nav .navbar-brand-text {
+    background: none;
+    -webkit-text-fill-color: unset;
+    color: #7c3aed;
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-nav .navbar-brand-text,
+  .footer-brand-text {
+    animation: none !important;
+    background-position: 0% 50%;
+  }
+}
+
+@media (max-width: 576px) {
+  .main-nav .navbar-brand-text {
+    font-size: 1.05rem;
+    margin-left: 10px;
+    letter-spacing: -0.05em;
+  }
+}
+
+@media (max-width: 380px) {
+  .main-nav .navbar-brand-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* Circular logo: clip with HTML wrapper + border (image file stays square) */
+.logo-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  box-sizing: border-box;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  vertical-align: middle;
+}
+
+.logo-circle--nav {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #b8c0ce;
+}
+
+.logo-circle--footer {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.site-footer {
+  border-top: 1px solid rgba(139, 92, 246, 0.22);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.footer-brand-col {
+  max-width: 26rem;
+}
+
+.footer-tagline {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 14px;
+  line-height: 1.65;
+  margin-top: 1.1rem;
+  margin-bottom: 0.65rem;
+}
+
+.footer-tagline strong {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.footer-byline {
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+.footer-byline strong {
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 600;
+}
+
+.footer-col-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 1.2rem;
+}
+
+.footer-link-list li {
+  margin-bottom: 0.55rem;
+}
+
+.footer-link-list a {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.footer-link-list a:hover {
+  color: #fff;
+  transform: translateX(3px);
+}
+
+.footer-play-lead {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.footer-play-badge {
+  max-width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.footer-play-btn {
+  line-height: 0;
+}
+
+.footer-play-btn:hover .footer-play-badge {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.5);
+}
+
+.footer-package {
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 12px;
+}
+
+.footer-package code {
+  color: rgba(199, 210, 254, 0.9);
+  background: rgba(255, 255, 255, 0.07);
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.footer-bottom {
+  background: #121317;
+  padding: 1.35rem 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.footer-copy {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 14px;
+  margin-bottom: 0.35rem;
+}
+
+.footer-legal-note {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.42);
+  line-height: 1.5;
+}
+
+.footer-legal-note a {
+  color: #c4b5fd;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-legal-note a:hover {
+  color: #ede9fe;
+  text-decoration: underline;
+}
+
+.footer-brand-lockup {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 0;
+}
+
+.footer-brand-lockup:hover .footer-brand-text {
+  filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.35));
+}
+
+.footer-brand-text {
+  display: inline-block;
+  font-family: "Plus Jakarta Sans", "Open Sans", system-ui, sans-serif;
+  font-size: 1.14rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1.25;
+  -webkit-font-smoothing: antialiased;
+  background-image: linear-gradient(
+    90deg,
+    #fb7185,
+    #fdba74,
+    #fde047,
+    #86efac,
+    #5eead4,
+    #93c5fd,
+    #a5b4fc,
+    #d8b4fe,
+    #f0abfc,
+    #fb7185
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: brand-rainbow-flow 5.5s linear infinite;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .footer-brand-text {
+    background: none;
+    -webkit-text-fill-color: unset;
+    color: #e9d5ff;
+    animation: none;
+    filter: none;
+  }
 }
 
 .main-nav .navbar-nav .nav-item {
@@ -547,18 +837,50 @@ button:focus,
 }
 
 .footer-main {
-  padding: 92px 0;
-  background: #1a1b1f;
+  position: relative;
+  padding: 72px 0 56px;
+  background: linear-gradient(165deg, #23242c 0%, #1a1b1f 42%, #15161b 100%);
+  overflow: hidden;
+}
+
+.footer-main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(167, 139, 250, 0.45),
+    rgba(96, 165, 250, 0.35),
+    transparent
+  );
+}
+
+.footer-main::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -15%;
+  width: 45%;
+  max-width: 420px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(109, 40, 217, 0.12) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {
   .footer-main {
-    padding: 50px 0;
+    padding: 48px 0 40px;
   }
 }
 
-.footer-main .block img {
-  margin-bottom: 20px;
+.footer-main .container {
+  position: relative;
+  z-index: 1;
 }
 
 .footer-main .block img #small-Apps {
