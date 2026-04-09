@@ -598,6 +598,21 @@ button:focus,
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.5);
 }
 
+.footer-ios-note {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.footer-ios-note a {
+  color: #c4b5fd;
+  text-decoration: underline;
+}
+
+.footer-ios-note a:hover {
+  color: #e9d5ff;
+}
+
 .footer-package {
   color: rgba(255, 255, 255, 0.38);
   font-size: 12px;
