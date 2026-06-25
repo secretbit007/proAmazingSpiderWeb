@@ -6,9 +6,10 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
-from starlette.responses import FileResponse, Response
+from starlette.responses import FileResponse, HTMLResponse, Response
 
 from app.api.routes import api_router
+from app.seo import SEO_MARKER, inject_seo
 from app.site import STATIC_DIR, router as site_router
 
 NOT_FOUND_PAGE = STATIC_DIR / "404.html"
@@ -61,7 +62,10 @@ class HtmlNotFoundMiddleware(BaseHTTPMiddleware):
         if "text/html" not in accept and "*/*" not in accept and accept != "":
             return response
         if NOT_FOUND_PAGE.is_file():
-            return FileResponse(NOT_FOUND_PAGE, status_code=404)
+            html_text = NOT_FOUND_PAGE.read_text(encoding="utf-8")
+            if SEO_MARKER in html_text:
+                html_text = inject_seo(html_text, request.url.path, noindex=True)
+            return HTMLResponse(html_text, status_code=404)
         return response
 
 
