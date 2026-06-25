@@ -21,12 +21,12 @@ FACEBOOK: https://www.facebook.com/themefisher
   <!-- Basic Page Needs
   ================================================== -->
   <meta charset="utf-8">
-  <title>proAmazingSpider — Spider Solitaire for Android</title>
+  <title>proAmazingSpider — Spider Solitaire for Android &amp; iPhone</title>
 
   <!-- Mobile Specific Metas
   ================================================== -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="AmazingSpider: computerised two-deck Spider patience for Android (Google Play: proAmazingSpider). Faster play, logical-path moves, Solve, and classic dealing—king to ace in suits. By SuperAce.">
+  <meta name="description" content="AmazingSpider: computerised two-deck Spider patience for Android and iPhone (Google Play & App Store: proAmazingSpider). Faster play, logical-path moves, Solve, and classic dealing—king to ace in suits. By SuperAce.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="author" content="SuperAce">
 
@@ -46,7 +46,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 
 </head>
 
-<body class="body-wrapper" data-spy="scroll" data-target=".privacy-nav">
+<body class="body-wrapper body-wrapper--game" data-spy="scroll" data-target=".privacy-nav">
 
 
 <nav class="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-0">
@@ -97,18 +97,40 @@ FACEBOOK: https://www.facebook.com/themefisher
 		<div class="shape" data-aos="fade-up-right" data-aos-duration="500" data-aos-delay="100"></div>
 		<div class="shape" data-aos="fade-down-left" data-aos-duration="500" data-aos-delay="0"></div>
 	</div>
+	<div class="suit-field" aria-hidden="true">
+		<span class="suit-float suit-float--1">♠</span>
+		<span class="suit-float suit-float--2">♥</span>
+		<span class="suit-float suit-float--3">♦</span>
+		<span class="suit-float suit-float--4">♣</span>
+		<span class="suit-float suit-float--5">♠</span>
+		<span class="suit-float suit-float--6">♥</span>
+	</div>
 	<div class="container">
 		<div class="row align-items-center">
 			<div class="col-md-6 order-2 order-md-1 text-center text-md-left">
-				<h1 class="text-white font-weight-bold mb-4">proAmazingSpider</h1>
-				<p class="text-white mb-4 lead"><strong>AmazingSpider</strong> is a computerised version of <strong>Spider</strong>—the traditional two-pack card patience. It is faster and more fun to play, with a clear table, color-coded suits, and tools like <strong>New</strong>, <strong>Deal</strong>, <strong>Solve</strong>, <strong>Undo</strong>, and <strong>Help</strong>. On Google Play: <strong>proAmazingSpider</strong>.</p>
+				<p class="game-hero-tag text-uppercase mb-2">Spider patience · two decks</p>
+				<h1 class="text-white font-weight-bold mb-4 game-hero-title">proAmazingSpider</h1>
+				<div class="game-hud game-hud--live mb-3" aria-label="Example in-game stats">
+					<span class="game-hud__chip"><span class="game-hud__label">Moves</span><strong class="game-hud__value" data-hud="moves">0</strong></span>
+					<span class="game-hud__chip"><span class="game-hud__label">Stack</span><strong class="game-hud__value" data-hud="stack">50</strong></span>
+					<span class="game-hud__chip game-hud__chip--done"><span class="game-hud__label">Done</span><strong class="game-hud__value" data-hud="done">0</strong></span>
+				</div>
+				<p class="text-white mb-4 lead"><strong>AmazingSpider</strong> is a computerised version of <strong>Spider</strong>—the traditional two-pack card patience. It is faster and more fun to play, with a clear table, color-coded suits, and tools like <strong>New</strong>, <strong>Deal</strong>, <strong>Solve</strong>, <strong>Undo</strong>, and <strong>Help</strong>. Available on <strong>Google Play</strong> and the <strong>App Store</strong> as <strong>proAmazingSpider</strong>.</p>
 				<p class="text-white mb-3">Track <strong>Moves</strong>, <strong>Stack</strong>, and how many suits are <strong>Done</strong> in the header—so you always know where you stand.</p>
-				<p class="text-white mb-5"><small><strong>iPhone / App Store:</strong> not published yet—we’ll add a store link here when an iOS build is available.</small></p>
-				<a href="https://play.google.com/store/apps/details?id=com.Mamre.proAmazingSpider" class="btn btn-main-md" rel="noopener noreferrer">Get it on Google Play</a>
-				<a href="/contact" class="btn btn-outline-light btn-main-md ml-2 ml-md-3 mt-3 mt-md-0">Contact</a>
+				<div class="store-badges store-badges--hero mb-4">
+					<a href="https://play.google.com/store/apps/details?id=com.Mamre.proAmazingSpider" class="store-badge-link" rel="noopener noreferrer">
+						<img src="images/app/google-play.jpg" class="img-fluid store-badge" alt="Get it on Google Play">
+					</a>
+					<a href="https://apps.apple.com/us/app/proamazingspider/id6769407076" class="store-badge-link" rel="noopener noreferrer">
+						<img src="images/app/apple-store.jpg" class="img-fluid store-badge" alt="Download on the App Store">
+					</a>
+				</div>
+				<a href="/contact" class="btn btn-outline-light btn-main-md">Contact</a>
 			</div>
 			<div class="col-md-6 text-center order-1 order-md-2">
-				<img class="img-fluid" src="images/app/game-phone-1.png" alt="proAmazingSpider running on a phone">
+				<div class="game-phone-glow">
+					<img class="img-fluid" src="images/app/game-phone-1.png" alt="proAmazingSpider running on a phone">
+				</div>
 			</div>
 		</div>
 	</div>
@@ -117,20 +139,20 @@ FACEBOOK: https://www.facebook.com/themefisher
 
 <section class="section pt-0 position-relative pull-top">
 	<div class="container">
-		<div class="rounded shadow p-5 bg-white">
+		<div class="game-panel shadow p-5">
 			<div class="row">
-				<div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center">
-					<i class="ti-layout-column3 text-primary h1"></i>
+				<div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center game-feature-card">
+					<div class="game-feature-card__icon" aria-hidden="true">♠</div>
 					<h3 class="mt-4 text-capitalize h5">Classic Spider deal</h3>
 					<p class="regular text-muted"><strong>54</strong> cards start in <strong>ten</strong> columns: <strong>four</strong> of six cards and <strong>six</strong> of five. The other <strong>50</strong> sit in a stock; when no move is possible, you deal <strong>ten</strong> at a time.</p>
 				</div>
-				<div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center">
-					<i class="ti-palette text-primary h1"></i>
+				<div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center game-feature-card">
+					<div class="game-feature-card__icon game-feature-card__icon--red" aria-hidden="true">♥</div>
 					<h3 class="mt-4 text-capitalize h5">King down to ace</h3>
 					<p class="regular text-muted">Build each suit from <strong>king</strong> to <strong>ace</strong>. When a full suit of <strong>13</strong> cards is complete, remove it by tapping the <strong>king</strong>. Color-coded suits make runs easy to read.</p>
 				</div>
-				<div class="col-lg-4 col-md-12 mt-5 mt-lg-0 text-center">
-					<i class="ti-panel text-primary h1"></i>
+				<div class="col-lg-4 col-md-12 mt-5 mt-lg-0 text-center game-feature-card">
+					<div class="game-feature-card__icon game-feature-card__icon--gold" aria-hidden="true">♣</div>
 					<h3 class="mt-4 text-capitalize h5">AmazingSpider extras</h3>
 					<p class="regular text-muted">Unlike strict Spider, you can move a <strong>mixed-suit</strong> column when there is a <strong>logical path</strong>. <strong>Solve</strong> joins same-suit fragments—handy near the end.</p>
 				</div>
@@ -268,13 +290,24 @@ FACEBOOK: https://www.facebook.com/themefisher
 ==================================-->
 <section class="video-promo section bg-1">
 	<div class="container">
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="content-block">
-					<h2>See the table</h2>
-					<p>Real Android captures—same patience Spider layout, stock deals of ten, and AmazingSpider conveniences you get from Google Play.</p>
-					<p class="mb-0"><a href="https://play.google.com/store/apps/details?id=com.Mamre.proAmazingSpider" class="text-white font-weight-bold" rel="noopener noreferrer">Install proAmazingSpider →</a></p>
+		<div class="row justify-content-center">
+			<div class="col-lg-8 text-center">
+				<div class="content-block content-block--video">
+					<h2>Watch proAmazingSpider</h2>
+					<p>Gameplay preview on YouTube—Spider patience with smart moves, auto-solve, and touch-friendly play on mobile.</p>
 				</div>
+			</div>
+			<div class="col-lg-4 col-md-6">
+				<div class="game-video game-video--short">
+					<iframe src="https://www.youtube.com/embed/_Dj7ADcIK80" title="proAmazingSpider gameplay on YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+				</div>
+				<p class="text-center mt-3 mb-0">
+					<a href="https://www.youtube.com/shorts/_Dj7ADcIK80" class="text-white font-weight-bold" rel="noopener noreferrer">Watch on YouTube</a>
+					<span class="text-white-50"> · </span>
+					<a href="https://play.google.com/store/apps/details?id=com.Mamre.proAmazingSpider" class="text-white font-weight-bold" rel="noopener noreferrer">Google Play</a>
+					<span class="text-white-50"> · </span>
+					<a href="https://apps.apple.com/us/app/proamazingspider/id6769407076" class="text-white font-weight-bold" rel="noopener noreferrer">App Store</a>
+				</p>
 			</div>
 		</div>
 	</div>
@@ -298,13 +331,13 @@ FACEBOOK: https://www.facebook.com/themefisher
 							<div class="image">
 								<img src="images/app/game-phone-1.png" alt="proAmazingSpider on a phone">
 							</div>
-							<cite>proAmazingSpider on Android</cite>
+							<cite>proAmazingSpider on mobile</cite>
 						</div>
 					</div>
 					<div class="item">
 						<div class="block shadow">
 							<p>
-								Published on <strong>Google Play</strong> as <strong>proAmazingSpider</strong> (com.Mamre.proAmazingSpider) by developer <strong>SuperAce</strong>. Questions? Use <a href="/contact">Contact</a> or the email in our <a href="/privacy-policy">Privacy Policy</a>.
+								Available on <strong>Google Play</strong> and the <strong>App Store</strong> as <strong>proAmazingSpider</strong>. Questions? Use <a href="/contact">Contact</a> or the email in our <a href="/privacy-policy">Privacy Policy</a>.
 							</p>
 							<div class="image">
 								<img src="images/app/game-phone-2.png" alt="proAmazingSpider on device">
@@ -319,18 +352,23 @@ FACEBOOK: https://www.facebook.com/themefisher
 </section>
 <!--====  End of Testimonial  ====-->
 
-<section class="call-to-action-app section bg-blue">
+<section class="call-to-action-app section bg-blue game-cta">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
 				<h2>Play proAmazingSpider</h2>
-				<p>Free to install from Google Play. Online mode uses HTTPS to our servers; offline play stays on your device.</p>
-				<p class="mb-0"><small><strong>iPhone:</strong> no App Store listing yet—this site will be updated when we ship on iOS.</small></p>
+				<p>Free to install from Google Play and the App Store. Online mode uses HTTPS to our servers; offline play stays on your device.</p>
 				<ul class="list-inline">
 					<li class="list-inline-item">
 						<a href="https://play.google.com/store/apps/details?id=com.Mamre.proAmazingSpider" class="btn btn-rounded-icon" rel="noopener noreferrer">
 							<i class="ti-android"></i>
 							Google Play
+						</a>
+					</li>
+					<li class="list-inline-item">
+						<a href="https://apps.apple.com/us/app/proamazingspider/id6769407076" class="btn btn-rounded-icon" rel="noopener noreferrer">
+							<i class="ti-apple"></i>
+							App Store
 						</a>
 					</li>
 					<li class="list-inline-item">
@@ -355,8 +393,9 @@ FACEBOOK: https://www.facebook.com/themefisher
         <div class="col-lg-4 col-md-12 mb-5 mb-lg-0 text-center text-lg-left">
           <div class="footer-brand-col mx-auto mx-lg-0 d-flex flex-column align-items-center align-items-lg-start">
             <a class="footer-brand-lockup" href="/"><span class="logo-circle logo-circle--footer"><img src="images/logo-alt.png" width="256" height="256" alt="" decoding="async" aria-hidden="true"></span><span class="footer-brand-text">proAmazingSpider</span></a>
-            <p class="footer-tagline text-center text-lg-left">Computerised <strong>Spider</strong> patience—two decks, ten columns, and quick play on Android. The store listing is <strong>proAmazingSpider</strong> by SuperAce.</p>
+            <p class="footer-tagline text-center text-lg-left">Computerised <strong>Spider</strong> patience—two decks, ten columns, and quick play on Android and iPhone. The store listing is <strong>proAmazingSpider</strong> by SuperAce.</p>
             <p class="footer-byline text-center text-lg-left">AmazingSpider game · SuperAce developer</p>
+            <div class="social-widgets" data-social-widgets="footer" aria-label="Connect and share"></div>
           </div>
         </div>
         <div class="col-lg-3 col-md-6 mb-5 mb-lg-0 text-center text-md-left">
@@ -371,12 +410,16 @@ FACEBOOK: https://www.facebook.com/themefisher
         </div>
         <div class="col-lg-5 col-md-6 text-center text-md-left">
           <h6 class="footer-col-title">Get the app</h6>
-          <p class="footer-play-lead mb-3">Download from Google Play—no account required in-app to start a table.</p>
-          <a href="https://play.google.com/store/apps/details?id=com.Mamre.proAmazingSpider" class="footer-play-btn d-inline-block" rel="noopener noreferrer">
-            <img src="images/app/google-play.jpg" class="img-fluid footer-play-badge" alt="Get it on Google Play" loading="lazy">
-          </a>
-          <p class="footer-ios-note mt-3 mb-0"><strong>iPhone / App Store:</strong> not published yet. We’ll link it here when the iOS app is live.</p>
-          <p class="footer-package mt-3 mb-0"><code>com.Mamre.proAmazingSpider</code></p>
+          <p class="footer-play-lead mb-3">Free on Google Play and the App Store—no account required in-app to start a table.</p>
+          <div class="footer-store-badges">
+            <a href="https://play.google.com/store/apps/details?id=com.Mamre.proAmazingSpider" class="footer-play-btn d-inline-block" rel="noopener noreferrer">
+              <img src="images/app/google-play.jpg" class="img-fluid footer-play-badge" alt="Get it on Google Play" loading="lazy">
+            </a>
+            <a href="https://apps.apple.com/us/app/proamazingspider/id6769407076" class="footer-play-btn d-inline-block" rel="noopener noreferrer">
+              <img src="images/app/apple-store.jpg" class="img-fluid footer-play-badge" alt="Download on the App Store" loading="lazy">
+            </a>
+          </div>
+          <p class="footer-package mt-3 mb-0"><code>com.Mamre.proAmazingSpider</code> · App Store <code>id6769407076</code></p>
         </div>
       </div>
     </div>
@@ -406,6 +449,8 @@ FACEBOOK: https://www.facebook.com/themefisher
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgeuuDfRlweIs7D6uo4wdIHVvJ0LonQ6g"></script>
   <script src="plugins/google-map/gmap.js"></script>
   
+  <script src="js/game-hud.js"></script>
+  <script src="js/social-widgets.js"></script>
   <script src="js/script.js"></script>
 </body>
 
