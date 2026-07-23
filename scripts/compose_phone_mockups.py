@@ -1,7 +1,7 @@
-"""Composite game screenshots into phone-style mockups (white bezel, notch, depth cues).
+"""Composite game screenshots into realistic black phone mockups.
 
-Adds simulated thickness (smooth gradient of side slices + light edge blur), bezel shading, screen-edge vignette, cast shadow,
-and a perspective warp (strength varies per asset). PNG alpha preserved (transparent background).
+Modern dark chassis, thin bezels, dynamic-island pill, home indicator,
+edge highlight, depth extrusion, and light perspective. Transparent PNG.
 
 Run from repo root:
   python scripts/compose_phone_mockups.py
@@ -19,34 +19,49 @@ from PIL import Image, ImageDraw, ImageFilter
 REPO = Path(__file__).resolve().parents[1]
 SRC_DIR = REPO / "app" / "static" / "images" / "app"
 
-CANVAS_W, CANVAS_H = 900, 1400
-MAX_SCREEN_W, MAX_SCREEN_H = 560, 980
-BEZEL_SIDE = 26
-BEZEL_TOP = 44
-BEZEL_BOTTOM = 34
-OUTER_RADIUS = 54
-INNER_RADIUS = 36
-FRAME_FILL = (255, 255, 255, 255)
-FRAME_OUTLINE = (228, 230, 236, 255)
-FRAME_OUTLINE_W = 1
-NOTCH_W, NOTCH_H = 108, 26
-NOTCH_RADIUS = 13
-NOTCH_FILL = (38, 38, 42, 255)
-# Cast shadow (device lifted off the “ground”)
-SHADOW_ALPHA = 92
-SHADOW_BLUR = 26
-SHADOW_OFFSET = (14, 26)
-# Fake thickness: many interpolated plates (avoids visible “steps”)
-DEPTH_MAX_DX = 11
-DEPTH_MAX_DY = 16
-DEPTH_STEPS = 26
-DEPTH_RGB_BACK = (118, 120, 128)
-DEPTH_RGB_FRONT = (246, 247, 250)
-DEPTH_EDGE_BLUR = 0.85
-SCREEN_BOTTOM_VIGNETTE_PX = 36
-SCREEN_VIGNETTE_STRENGTH = 0.18
+CANVAS_W, CANVAS_H = 900, 1480
+MAX_SCREEN_W, MAX_SCREEN_H = 560, 1040
 
-# Indices 1–4: perspective strength ("tilt_subtle" | "tilt_back" | "tilt_yaw" | "flat")
+# Slim modern black phone proportions
+BEZEL_SIDE = 12
+BEZEL_TOP = 28
+BEZEL_BOTTOM = 30
+OUTER_RADIUS = 62
+INNER_RADIUS = 48
+
+# Chassis colors (near-black with cool metal edge)
+FRAME_FILL = (18, 18, 20, 255)
+FRAME_OUTLINE = (72, 74, 80, 255)
+FRAME_OUTLINE_W = 2
+INNER_RIM = (8, 8, 10, 220)
+
+# Dynamic Island
+ISLAND_W, ISLAND_H = 126, 34
+ISLAND_RADIUS = 17
+ISLAND_FILL = (6, 6, 8, 255)
+CAMERA_DOT = (28, 32, 48, 255)
+CAMERA_LENS = (12, 14, 22, 255)
+
+# Home indicator
+HOME_W, HOME_H = 118, 5
+HOME_FILL = (235, 235, 240, 200)
+
+# Cast shadow
+SHADOW_ALPHA = 110
+SHADOW_BLUR = 30
+SHADOW_OFFSET = (16, 30)
+
+# Side thickness (dark metal)
+DEPTH_MAX_DX = 10
+DEPTH_MAX_DY = 14
+DEPTH_STEPS = 22
+DEPTH_RGB_BACK = (28, 28, 32)
+DEPTH_RGB_FRONT = (58, 60, 66)
+DEPTH_EDGE_BLUR = 0.7
+
+SCREEN_BOTTOM_VIGNETTE_PX = 28
+SCREEN_VIGNETTE_STRENGTH = 0.12
+
 PHONE_3D_PRESETS: dict[int, str] = {
     1: "tilt_back",
     2: "tilt_yaw",
@@ -56,7 +71,6 @@ PHONE_3D_PRESETS: dict[int, str] = {
 
 
 def _gaussian_solve_8(A: list[list[float]], b: list[float]) -> list[float]:
-    """Solve 8×8 linear system (A square, augmented elimination)."""
     n = 8
     M = [A[i][:] + [b[i]] for i in range(n)]
     for col in range(n):
@@ -78,7 +92,6 @@ def _gaussian_solve_8(A: list[list[float]], b: list[float]) -> list[float]:
 
 
 def _homography_forward(src4: list[tuple[float, float]], dst4: list[tuple[float, float]]) -> list[list[float]]:
-    """8 DOF homography (h22=1) mapping each src_k -> dst_k. Returns 3×3 forward matrix."""
     M: list[list[float]] = []
     rhs: list[float] = []
     for (u, v), (x, y) in zip(src4, dst4):
@@ -119,7 +132,6 @@ def _invert_3x3(m: list[list[float]]) -> list[list[float]]:
 
 
 def _pillow_perspective_from_forward(H: list[list[float]]) -> tuple[float, ...]:
-    """Pillow samples INPUT at coords given OUTPUT (x,y); use H⁻¹."""
     inv = _invert_3x3(H)
     k = inv[2][2]
     if abs(k) < 1e-14:
@@ -144,7 +156,6 @@ def _alpha_bbox(img: Image.Image) -> tuple[int, int, int, int]:
 
 
 def apply_perspective_style(img: Image.Image, style: str) -> Image.Image:
-    """Warp full RGBA image so its rectangle maps to a mild 3D-style quad."""
     if style == "flat":
         return img
 
@@ -209,47 +220,62 @@ def _lerp_channel(a: int, b: int, t: float) -> int:
 
 
 def _rounded_plate(size: tuple[int, int], radius: int, rgba: tuple[int, int, int, int]) -> Image.Image:
-    """Filled rounded rectangle on transparent (same geometry as the phone body)."""
     w, h = size
     im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     ImageDraw.Draw(im).rounded_rectangle((0, 0, w - 1, h - 1), radius=radius, fill=rgba)
     return im
 
 
-def _shade_white_face(frame: Image.Image) -> Image.Image:
-    """Bezel lighting with smoothstep falloff (no hard shading bands)."""
+def _shade_black_face(frame: Image.Image) -> Image.Image:
+    """Subtle specular rim on a dark chassis (left shadow, right/top highlight)."""
     w, h = frame.size
     out = frame.copy()
     px = out.load()
-    left_w, right_w, top_h = 20, 14, 16
+    left_w, right_w, top_h, bottom_h = 18, 16, 20, 14
     for y in range(h):
         for x in range(min(left_w, w)):
             r, g, b, a = px[x, y]
             if a < 8:
                 continue
             t = _smoothstep(1.0 - x / float(left_w))
-            f = 1.0 - 0.14 * t
+            f = 1.0 - 0.28 * t
             px[x, y] = (int(r * f), int(g * f), int(b * f), a)
         for x in range(max(0, w - right_w), w):
             r, g, b, a = px[x, y]
             if a < 8:
                 continue
             t = _smoothstep((x - (w - right_w)) / float(right_w))
-            f = 1.0 + 0.055 * t
-            px[x, y] = (min(255, int(r * f)), min(255, int(g * f)), min(255, int(b * f)), a)
+            boost = 1.0 + 0.55 * t
+            px[x, y] = (
+                min(255, int(r * boost + 18 * t)),
+                min(255, int(g * boost + 18 * t)),
+                min(255, int(b * boost + 22 * t)),
+                a,
+            )
     for x in range(w):
         for y in range(min(top_h, h)):
             r, g, b, a = px[x, y]
             if a < 8:
                 continue
             t = _smoothstep(1.0 - y / float(top_h))
-            f = 1.0 + 0.085 * t
-            px[x, y] = (min(255, int(r * f)), min(255, int(g * f)), min(255, int(b * f)), a)
+            boost = 1.0 + 0.35 * t
+            px[x, y] = (
+                min(255, int(r * boost + 12 * t)),
+                min(255, int(g * boost + 12 * t)),
+                min(255, int(b * boost + 14 * t)),
+                a,
+            )
+        for y in range(max(0, h - bottom_h), h):
+            r, g, b, a = px[x, y]
+            if a < 8:
+                continue
+            t = _smoothstep((y - (h - bottom_h)) / float(bottom_h))
+            f = 1.0 - 0.18 * t
+            px[x, y] = (int(r * f), int(g * f), int(b * f), a)
     return out
 
 
 def _screen_bottom_depth(inner: Image.Image) -> Image.Image:
-    """Slight darkening at the bottom of the glass (ambient occlusion)."""
     w, h = inner.size
     band = min(SCREEN_BOTTOM_VIGNETTE_PX, h)
     if band <= 0:
@@ -280,6 +306,56 @@ def _fit_screen(img: Image.Image) -> Image.Image:
     return img.convert("RGBA").resize((nw, nh), Image.Resampling.LANCZOS)
 
 
+def _draw_dynamic_island(canvas: Image.Image, phone_box: tuple[int, int, int, int]) -> Image.Image:
+    """Pill island with dual-camera dots, sitting in the top bezel / screen edge."""
+    ox, oy, phone_w, _phone_h = phone_box
+    layer = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+
+    ix0 = ox + (phone_w - ISLAND_W) // 2
+    iy0 = oy + max(8, (BEZEL_TOP - ISLAND_H) // 2 + 2)
+    ix1 = ix0 + ISLAND_W
+    iy1 = iy0 + ISLAND_H
+
+    draw.rounded_rectangle((ix0, iy0, ix1, iy1), radius=ISLAND_RADIUS, fill=ISLAND_FILL)
+
+    # Soft outer halo so the pill reads above the glass
+    halo = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    ImageDraw.Draw(halo).rounded_rectangle(
+        (ix0 - 1, iy0 - 1, ix1 + 1, iy1 + 1),
+        radius=ISLAND_RADIUS + 1,
+        fill=(0, 0, 0, 90),
+    )
+    halo = halo.filter(ImageFilter.GaussianBlur(1.2))
+    canvas = Image.alpha_composite(canvas, halo)
+    canvas = Image.alpha_composite(canvas, layer)
+
+    # Cameras: larger right lens, smaller left sensor
+    detail = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(detail)
+    cy = (iy0 + iy1) // 2
+    # speaker / sensor strip hint
+    d.ellipse((ix0 + 18, cy - 5, ix0 + 28, cy + 5), fill=CAMERA_DOT)
+    d.ellipse((ix0 + 20, cy - 3, ix0 + 26, cy + 3), fill=CAMERA_LENS)
+    # main camera
+    d.ellipse((ix1 - 34, cy - 8, ix1 - 18, cy + 8), fill=CAMERA_DOT)
+    d.ellipse((ix1 - 31, cy - 5, ix1 - 21, cy + 5), fill=CAMERA_LENS)
+    d.ellipse((ix1 - 28, cy - 2, ix1 - 24, cy + 2), fill=(55, 70, 110, 180))
+    return Image.alpha_composite(canvas, detail)
+
+
+def _draw_home_indicator(canvas: Image.Image, sx: int, sy: int, sw: int, sh: int) -> Image.Image:
+    layer = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    hx0 = sx + (sw - HOME_W) // 2
+    hy0 = sy + sh - 16
+    ImageDraw.Draw(layer).rounded_rectangle(
+        (hx0, hy0, hx0 + HOME_W, hy0 + HOME_H),
+        radius=HOME_H // 2 + 1,
+        fill=HOME_FILL,
+    )
+    return Image.alpha_composite(canvas, layer)
+
+
 def compose_phone(screenshot: Image.Image) -> Image.Image:
     screen = _fit_screen(screenshot)
     sw, sh = screen.size
@@ -291,6 +367,7 @@ def compose_phone(screenshot: Image.Image) -> Image.Image:
 
     bg = Image.new("RGBA", (CANVAS_W, CANVAS_H), (0, 0, 0, 0))
 
+    # Soft ground shadow
     sx_off, sy_off = SHADOW_OFFSET
     shadow_layer = Image.new("RGBA", (CANVAS_W, CANVAS_H), (0, 0, 0, 0))
     ImageDraw.Draw(shadow_layer).rounded_rectangle(
@@ -301,6 +378,7 @@ def compose_phone(screenshot: Image.Image) -> Image.Image:
     shadow_layer = shadow_layer.filter(ImageFilter.GaussianBlur(SHADOW_BLUR))
     bg = Image.alpha_composite(bg, shadow_layer)
 
+    # Dark metal thickness behind the face
     depth_canvas = Image.new("RGBA", (CANVAS_W, CANVAS_H), (0, 0, 0, 0))
     n = max(DEPTH_STEPS, 2)
     prev_dx, prev_dy = -1, -1
@@ -323,6 +401,7 @@ def compose_phone(screenshot: Image.Image) -> Image.Image:
         depth_canvas = depth_canvas.filter(ImageFilter.GaussianBlur(DEPTH_EDGE_BLUR))
     bg = Image.alpha_composite(bg, depth_canvas)
 
+    # Black faceplate
     frame_rgba = Image.new("RGBA", (phone_w, phone_h), (0, 0, 0, 0))
     fr = ImageDraw.Draw(frame_rgba)
     fr.rounded_rectangle(
@@ -332,7 +411,15 @@ def compose_phone(screenshot: Image.Image) -> Image.Image:
         outline=FRAME_OUTLINE,
         width=FRAME_OUTLINE_W,
     )
-    frame_rgba = _shade_white_face(frame_rgba)
+    # Inner hairline so the chassis edge reads as a phone rail
+    inset = 3
+    fr.rounded_rectangle(
+        (inset, inset, phone_w - 1 - inset, phone_h - 1 - inset),
+        radius=max(4, OUTER_RADIUS - inset),
+        outline=(40, 42, 48, 255),
+        width=1,
+    )
+    frame_rgba = _shade_black_face(frame_rgba)
 
     inner_mask = _rounded_rect_mask((sw, sh), INNER_RADIUS)
     inner = Image.new("RGBA", (sw, sh), (0, 0, 0, 0))
@@ -345,25 +432,18 @@ def compose_phone(screenshot: Image.Image) -> Image.Image:
     sy = oy + BEZEL_TOP
     bg.paste(inner, (sx, sy), inner)
 
+    # Screen glass rim
     rim = Image.new("RGBA", (CANVAS_W, CANVAS_H), (0, 0, 0, 0))
     ImageDraw.Draw(rim).rounded_rectangle(
         (sx, sy, sx + sw - 1, sy + sh - 1),
         radius=INNER_RADIUS,
-        outline=(216, 218, 224, 200),
-        width=1,
+        outline=INNER_RIM,
+        width=2,
     )
     bg = Image.alpha_composite(bg, rim)
 
-    # Notch
-    nx0 = ox + (phone_w - NOTCH_W) // 2
-    ny0 = oy + max(6, (BEZEL_TOP - NOTCH_H) // 2)
-    notch_layer = Image.new("RGBA", (CANVAS_W, CANVAS_H), (0, 0, 0, 0))
-    ImageDraw.Draw(notch_layer).rounded_rectangle(
-        (nx0, ny0, nx0 + NOTCH_W, ny0 + NOTCH_H),
-        radius=NOTCH_RADIUS,
-        fill=NOTCH_FILL,
-    )
-    bg = Image.alpha_composite(bg, notch_layer)
+    bg = _draw_dynamic_island(bg, (ox, oy, phone_w, phone_h))
+    bg = _draw_home_indicator(bg, sx, sy, sw, sh)
 
     return bg
 
@@ -390,8 +470,7 @@ def main() -> None:
         style = PHONE_3D_PRESETS.get(i, "flat")
         mock = apply_perspective_style(mock, style)
         mock.save(out, "PNG", optimize=True)
-        tag = f" ({style})"
-        print(f"Wrote {out.relative_to(REPO)}{tag}")
+        print(f"Wrote {out.relative_to(REPO)} ({style})")
 
 
 if __name__ == "__main__":
