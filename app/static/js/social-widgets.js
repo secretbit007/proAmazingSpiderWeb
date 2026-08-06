@@ -7,7 +7,7 @@
     email: 'mailto:spider01082026@gmail.com',
     playStore: 'https://play.google.com/store/apps/details?id=com.Mamre.proAmazingSpider',
     appStore: 'https://apps.apple.com/us/app/proamazingspider/id6769407076',
-    youtube: 'https://www.youtube.com/shorts/_Dj7ADcIK80',
+    youtube: 'https://www.youtube.com/watch?v=udhOnFEOQlc',
     reddit: 'https://www.reddit.com/r/proamazingspider/',
     discord: 'https://discord.gg/E7naGZ5US4',
   };
