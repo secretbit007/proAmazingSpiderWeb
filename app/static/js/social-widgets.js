@@ -4,7 +4,7 @@
   var SHARE_TEXT = 'proAmazingSpider — Spider Solitaire for Android & iPhone';
 
   var LINKS = {
-    email: 'mailto:normand.maclaurin@gmail.com',
+    email: 'mailto:spider01082026@gmail.com',
     playStore: 'https://play.google.com/store/apps/details?id=com.Mamre.proAmazingSpider',
     appStore: 'https://apps.apple.com/us/app/proamazingspider/id6769407076',
     youtube: 'https://www.youtube.com/shorts/_Dj7ADcIK80',
