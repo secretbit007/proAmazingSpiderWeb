@@ -50,7 +50,7 @@ def _organization_schema() -> dict:
     return {
         "@type": "Organization",
         "@id": f"{SITE_URL}/#organization",
-        "name": "SuperAce",
+        "name": "paSpider P/L",
         "url": SITE_URL,
         "logo": absolute_url("/images/logo.png"),
     }
@@ -83,7 +83,7 @@ def _mobile_application_schema() -> dict:
         "installUrl": [GOOGLE_PLAY_URL, APP_STORE_URL],
         "downloadUrl": GOOGLE_PLAY_URL,
         "image": og_image_url(),
-        "author": {"@type": "Organization", "name": "SuperAce"},
+        "author": {"@type": "Organization", "name": "paSpider P/L"},
     }
 
 
