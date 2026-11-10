@@ -71,7 +71,7 @@ class HtmlNotFoundMiddleware(BaseHTTPMiddleware):
 
 app = FastAPI(
     title="proAmazingSpider",
-    description="Marketing site for AmazingSpider / proAmazingSpider (two-deck Spider patience, Android & iOS) by SuperAce.",
+    description="Marketing site for AmazingSpider / proAmazingSpider (two-deck Spider patience, Android & iOS) by paSpider P/L.",
 )
 
 app.include_router(api_router, prefix="/api")

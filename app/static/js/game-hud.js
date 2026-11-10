@@ -7,18 +7,24 @@
   }
 
   var movesEl = hud.querySelector('[data-hud="moves"]');
-  var stackEl = hud.querySelector('[data-hud="stack"]');
+  var timeEl = hud.querySelector('[data-hud="time"]');
   var doneEl = hud.querySelector('[data-hud="done"]');
-  if (!movesEl || !stackEl || !doneEl) {
+  if (!movesEl || !timeEl || !doneEl) {
     return;
   }
 
-  var state = { moves: 0, stockLeft: 5, stockMax: 5, complete: 0, completeMax: 8 };
+  var state = { moves: 0, seconds: 0, complete: 0, completeMax: 8 };
   var tick = 0;
+
+  function formatTime(totalSeconds) {
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = totalSeconds % 60;
+    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+  }
 
   function render() {
     movesEl.textContent = String(state.moves);
-    stackEl.textContent = state.stockLeft + '/' + state.stockMax;
+    timeEl.textContent = formatTime(state.seconds);
     doneEl.textContent = state.complete + '/' + state.completeMax;
   }
 
@@ -28,23 +34,21 @@
     chip.classList.add('game-hud__chip--tick');
   }
 
+  // One tick a second, like the clock in the app.
   function step() {
     tick += 1;
-    if (tick % 3 === 0 && state.stockLeft > 0) {
-      state.stockLeft -= 1;
-      state.moves += 1;
-      pulse(stackEl.closest('.game-hud__chip'));
-    } else if (tick % 5 === 0) {
+    state.seconds += 1;
+    if (tick % 2 === 0) {
       state.moves += 1;
       pulse(movesEl.closest('.game-hud__chip'));
     }
-    if (tick === 14 && state.complete < 1) {
-      state.complete = 1;
+    if (tick % 12 === 0 && state.complete < state.completeMax) {
+      state.complete += 1;
       pulse(doneEl.closest('.game-hud__chip'));
     }
-    if (tick >= 22) {
+    if (tick >= 40) {
       state.moves = 0;
-      state.stockLeft = state.stockMax;
+      state.seconds = 0;
       state.complete = 0;
       tick = 0;
     }
@@ -57,5 +61,5 @@
     return;
   }
 
-  window.setInterval(step, 1400);
+  window.setInterval(step, 1000);
 })();
